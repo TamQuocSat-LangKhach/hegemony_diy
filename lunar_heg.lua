@@ -642,7 +642,7 @@ local xuyi = fk.CreateTriggerSkill{
     local targets = table.map(room:getOtherPlayers(player), Util.IdMapper)
     if #targets > 0 then
       local to = room:getPlayerById(room:askForChoosePlayers(player, targets, 1, 1, "#fk_heg__xuyi-choose", self.name, false)[1])
-      if to.gender == General.Male then
+      if to:isMale() then
         H.addHegMark(room, to, "companion")
       else
         room:handleAddLoseSkills(to, xianwan.name, nil)

@@ -112,7 +112,7 @@ local yizan = fk.CreateTriggerSkill{
     if event == fk.EventPhaseStart then
       if player.room:askForSkillInvoke(player, self.name, nil, "#wk_heg__yizan-invoke") then
         local targets = table.map(table.filter(room:getOtherPlayers(player), function(p)
-          return (p:getHandcardNum() < player:getHandcardNum()) end), function(p) return p.id end)
+          return (p:getHandcardNum() < player:getHandcardNum()) end), Util.IdMapper)
         if #targets > 0 then
           local to = room:askForChoosePlayers(player, targets, 1, 1, "#wk_heg__yizan-choose", self.name, true)
           self.cost_data = to[1]
@@ -417,7 +417,7 @@ local tugui = fk.CreateTriggerSkill{
         local card = room:askForCardChosen(player, room:getPlayerById(to[1]), "h", self.name)
         room:obtainCard(player.id, card, false, fk.ReasonPrey)
         player:showCards(card)
-        local mark = U.getMark(player, "wk_heg__tugui")
+        local mark = player:getTableMark("wk_heg__tugui")
         table.insert(mark, {player.id, card})
         room:setPlayerMark(player, "wk_heg__tugui", mark)
       end
@@ -1685,10 +1685,10 @@ local jiexun = fk.CreateTriggerSkill{
     local tos = #targets == 1 and targets or room:askForChoosePlayers(player, targets, 1, 1, "#wk_heg__jiexun-choose-cancel:::" .. data.card:toLogString(), self.name, false)
     AimGroup:cancelTarget(data, tos[1])
     if Fk:getCardById(card[1]).suit == data.card.suit then
-      local mark = U.getMark(target, "@wk_heg__jiexun-turn")
+      local mark = target:getTableMark("@wk_heg__jiexun-turn")
       if table.insertIfNeed(mark, Fk:getCardById(card[1]):getSuitString(true)) then
         room:setPlayerMark(target, "@wk_heg__jiexun-turn", mark)
-        mark = U.getMark(target, "_wk_heg__jiexun-turn")
+        mark = target:getTableMark("_wk_heg__jiexun-turn")
         mark[Fk:getCardById(card[1]):getSuitString(true)] = player.id
         room:setPlayerMark(target, "_wk_heg__jiexun-turn", mark)
       end
@@ -1702,7 +1702,7 @@ local jiexun_trigger = fk.CreateTriggerSkill{
   anim_type = "special",
   can_trigger = function (self, event, target, player, data)
     if target:getMark("@wk_heg__jiexun-turn") == 0 then return false end
-    return U.getMark(target, "_wk_heg__jiexun-turn")[data.card:getSuitString(true)] == player.id
+    return target:getTableMark("_wk_heg__jiexun-turn")[data.card:getSuitString(true)] == player.id
   end,
   on_cost = Util.TrueFunc,
   on_use = function (self, event, target, player, data)
@@ -1710,11 +1710,11 @@ local jiexun_trigger = fk.CreateTriggerSkill{
     local targets = room:getUseExtraTargets(data)
     local to = room:askForChoosePlayers(target, targets, 1, 1, "#wk_heg__jiexun-choose-add:::" .. data.card:toLogString(), self.name, true)
     if #to > 0 then TargetGroup:pushTargets(data.tos, to[1]) end
-    local mark = U.getMark(target, "@wk_heg__jiexun-turn")
+    local mark = target:getTableMark("@wk_heg__jiexun-turn")
     table.removeOne(mark, data.card:getSuitString(true))
     if #mark == 0 then mark = 0 end
     room:setPlayerMark(target, "@wk_heg__jiexun-turn", mark)
-    mark = U.getMark(target, "_wk_heg__jiexun-turn")
+    mark = target:getTableMark("_wk_heg__jiexun-turn")
     mark[data.card:getSuitString(true)] = nil
     room:setPlayerMark(target, "_wk_heg__jiexun-turn", mark)
   end,
@@ -2624,7 +2624,7 @@ local mingjie = fk.CreateTriggerSkill{
   on_use = function(self, event, target, player, data)
     local room = player.room
     local to = room:getPlayerById(self.cost_data)
-    local mark = U.getMark(to, "@@wk_heg__mingjie-turn")
+    local mark = to:getTableMark("@@wk_heg__mingjie-turn")
     table.insert(mark, player.id)
     room:setPlayerMark(to, "@@wk_heg__mingjie-turn", mark)
   end,
