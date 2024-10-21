@@ -2234,10 +2234,10 @@ local duanyi = fk.CreateTriggerSkill{
     if player:hasSkill(self) then
       for _, v in pairs(data) do
         -- 先这样，藕合过于麻烦
-        if table.contains(Fk.generals[v]:getSkillNameList(), self.name) 
-         or (player:getMark("wk_heg__duanyi") ~= 0 and target ~= player and not target.dead
+        if table.contains(Fk.generals[v]:getSkillNameList(), self.name)
+          or (player:getMark("wk_heg__duanyi") ~= 0 and target ~= player and not target.dead
           and not ((player:getMark("wk_heg__duanyi") == 9 and target.phase == 9) or (player:getMark("wk_heg__duanyi") ~= 9 and target.phase ~= 9))) then 
-          return true 
+          return true
         end
       end
     end
@@ -3253,7 +3253,6 @@ local kuangzhis = fk.CreateTriggerSkill{
       local tos = room:askForChoosePlayers(player, targets, 1, 1, "wk_heg__kuangzhis-choose", self.name, false)
       local to = room:getPlayerById(tos[1])
       room:useVirtualCard("duel", nil, player, to, self.name)
-      
     end
   end,
 }
