@@ -1802,13 +1802,13 @@ local fk__xieshou = fk.CreateTriggerSkill{
   end,
   on_cost = function (self, event, target, player, data)
     local room = player.room
-    local all_choices = {"chained", "叠置", "Cancel"}
+    local all_choices = {"chained", "stack", "Cancel"}
     local choices = {}
     if not player.chained then
       table.insert(choices, "chained")
     end
     if player.faceup then
-      table.insert(choices, "叠置")
+      table.insert(choices, "stack")
     end
     table.insert(choices,"Cancel")
     if #choices>0 then
@@ -1842,7 +1842,7 @@ local fk__xieshou = fk.CreateTriggerSkill{
           end
         end
       end
-      elseif self.cost_data == "叠置" then
+      elseif self.cost_data == "stack" then
         if player.faceup and player:isAlive() then
           player:turnOver()
         end

@@ -549,7 +549,7 @@ local suchao_effect = fk.CreateTriggerSkill{
     end
     for _, target in ipairs(room:getAlivePlayers()) do
       if target:getMark("zx_heg__suchao-phase") > 0 and not target.dead and not player.dead then
-        local use = room:askForUseCard(target, "slash", "slash", "#zx_heg__suchao-ask:"..player.id, true, {include_targets = {player.id}, bypass_distances = true, bypass_times = true })
+        local use = room:askForUseCard(target, "slash", "slash", "#zx_heg__suchao-ask:"..player.id, true, {exclusive_targets = {player.id}, bypass_distances = true, bypass_times = true })
         if use then
           room:notifySkillInvoked(player, suchao.name, "offensive")
           player:broadcastSkillInvoke(suchao.name)
