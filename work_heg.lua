@@ -2624,9 +2624,7 @@ local mingjie = fk.CreateTriggerSkill{
   on_use = function(self, event, target, player, data)
     local room = player.room
     local to = room:getPlayerById(self.cost_data)
-    local mark = to:getTableMark("@@wk_heg__mingjie-turn")
-    table.insert(mark, player.id)
-    room:setPlayerMark(to, "@@wk_heg__mingjie-turn", mark)
+    room:addTableMark(to, "@@wk_heg__mingjie-turn", player.id)
   end,
 }
 
