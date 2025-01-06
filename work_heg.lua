@@ -2076,7 +2076,7 @@ local fuman = fk.CreateActiveSkill{
     end
     local slash_card = Fk:cloneCard("slash")
     slash_card.skillName = self.name
-    if U.canUseCardTo(room, target, player, slash_card, false, false) and not target:prohibitUse(slash_card) then
+    if target:canUseTo(slash_card, player, { bypass_times = true, bypass_distances = true }) and not target:prohibitUse(slash_card) then
       table.insert(choices, "wk_heg__fuman-useslash")
     end
     if #choices == 0 then return end
