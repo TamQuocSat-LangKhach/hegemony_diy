@@ -136,7 +136,7 @@ local zhanmeng = fk.CreateTriggerSkill{
     end
     local targets = {}
     if player:getMark("fk_heg__zhanmeng3-turn") == 0 then
-      for _, p in ipairs(room:getOtherPlayers(player)) do
+      for _, p in ipairs(room:getOtherPlayers(player, false)) do
         if not p:isNude() then
           table.insertIfNeed(choices, "fk_heg__zhanmeng3")
           table.insert(targets, p.id)
@@ -639,7 +639,7 @@ local xuyi = fk.CreateTriggerSkill{
   end,
   on_use = function (self, event, target, player, data)
     local room = player.room
-    local targets = table.map(room:getOtherPlayers(player), Util.IdMapper)
+    local targets = table.map(room:getOtherPlayers(player, false), Util.IdMapper)
     if #targets > 0 then
       local to = room:getPlayerById(room:askForChoosePlayers(player, targets, 1, 1, "#fk_heg__xuyi-choose", self.name, false)[1])
       if to:isMale() then
@@ -897,7 +897,7 @@ local tongli = fk.CreateTriggerSkill{
           end
         end
         if table.contains({"savage_assault", "archery_attack"}, data.card.name) then  --to modify tenyear's stupid processing
-          for _, p in ipairs(room:getOtherPlayers(player)) do
+          for _, p in ipairs(room:getOtherPlayers(player, false)) do
             if not player:isProhibited(p, Fk:cloneCard(data.card.name)) then
               table.insertIfNeed(tos, p.id)
             end
@@ -1310,8 +1310,8 @@ local jiaozi = fk.CreateTriggerSkill{
   frequency = Skill.Compulsory,
   events = {fk.DamageCaused, fk.DamageInflicted},
   can_trigger = function (self, event, target, player, data)
-    local targets = table.filter(player.room:getOtherPlayers(player), function(p) return H.compareKingdomWith(player, p) end)
-    return player:hasSkill(self) and player == target and #targets > 0 
+    local targets = table.filter(player.room:getOtherPlayers(player, false), function(p) return H.compareKingdomWith(player, p) end)
+    return player:hasSkill(self) and player == target and #targets > 0
       and table.every(targets, function(p) return player:getHandcardNum() > p:getHandcardNum() end)
   end,
   on_cost = Util.TrueFunc,

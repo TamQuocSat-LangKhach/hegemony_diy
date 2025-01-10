@@ -111,7 +111,7 @@ local yizan = fk.CreateTriggerSkill{
     local room = player.room
     if event == fk.EventPhaseStart then
       if player.room:askForSkillInvoke(player, self.name, nil, "#wk_heg__yizan-invoke") then
-        local targets = table.map(table.filter(room:getOtherPlayers(player), function(p)
+        local targets = table.map(table.filter(room:getOtherPlayers(player, false), function(p)
           return (p:getHandcardNum() < player:getHandcardNum()) end), Util.IdMapper)
         if #targets > 0 then
           local to = room:askForChoosePlayers(player, targets, 1, 1, "#wk_heg__yizan-choose", self.name, true)
@@ -831,7 +831,7 @@ local hongde = fk.CreateTriggerSkill{
   end,
   on_use = function(self, event, target, player, data)
     local room = player.room
-    local targets = table.map(room:getOtherPlayers(player), Util.IdMapper)
+    local targets = table.map(room:getOtherPlayers(player, false), Util.IdMapper)
     local tos, id = room:askForChooseCardAndPlayers(player, targets, 1, 1, ".", "#wk_heg__hongde-give", self.name, false)
     room:obtainCard(tos[1], id, false, fk.ReasonGive)
     if not player.dead then
@@ -1407,7 +1407,7 @@ local juanxia = fk.CreateTriggerSkill{
     local room = player.room
     local targets = {}
     local slash = Fk:cloneCard("slash")
-    for _, p in ipairs(room:getOtherPlayers(player)) do
+    for _, p in ipairs(room:getOtherPlayers(player, false)) do
       if not player:isProhibited(p, slash) then
         table.insert(targets, p.id)
       end
@@ -2614,7 +2614,7 @@ local mingjie = fk.CreateTriggerSkill{
   end,
   on_cost = function(self, event, target, player, data)
     local room = player.room
-    local targets = table.map(room:getOtherPlayers(player), Util.IdMapper)
+    local targets = table.map(room:getOtherPlayers(player, false), Util.IdMapper)
     local to = player.room:askForChoosePlayers(player, targets, 1, 1, "#wk_heg__mingjie-choose", self.name, true)
     if #to > 0 then
       self.cost_data = to[1]
@@ -3143,7 +3143,7 @@ local zuilun = fk.CreateTriggerSkill{
     end
     if #choices == 0 then
       room:notifySkillInvoked(player, self.name, "offensive")
-      local targets = table.map(room:getOtherPlayers(player), Util.IdMapper)
+      local targets = table.map(room:getOtherPlayers(player, false), Util.IdMapper)
       local tos = room:askForChoosePlayers(player, targets, 1, 1, "wk_heg__zuilun-choose", self.name, false)
       local to = room:getPlayerById(tos[1])
       room:damage{
@@ -3916,7 +3916,7 @@ local qiangzhi = fk.CreateTriggerSkill{
   end,
   on_cost = function(self, event, target, player, data)
     local room = player.room
-    local targets = table.map(table.filter(room:getOtherPlayers(player), function(p)
+    local targets = table.map(table.filter(room:getOtherPlayers(player, false), function(p)
       return not p:isKongcheng() end), Util.IdMapper)
     local to = room:askForChoosePlayers(player, targets, 1, 1, "#wk_heg__qiangzhi-choose", self.name, true)
     if #to > 0 then
